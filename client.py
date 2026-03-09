@@ -41,7 +41,9 @@ while not has_quit:
 
     print('PICO MOTOR DRIVER INTERFACE')
     # display the menu options; this list will grow
-    print('\ta: read current \td: add 1 \te: sum & difference \tf: set duty cycle \tg: set Kp and Ki \th: read Kp and Ki \tr: read mode \tq: quit') # '\t' is a tab
+    print('d: add 1 \t\te: sum & difference \ta: read current')
+    print('f: set duty cycle \tg: set Kp and Ki \th: read Kp and Ki')
+    print('r: read mode \tp: power off \tq: quit \tq: quit')
   
     # read the user's choice
     selection = input('\nENTER COMMAND: ')
@@ -53,11 +55,8 @@ while not has_quit:
     # take the appropriate actionsource .venv/bin/activate
 
     # there is no switch() in python, using if elif instead
-    if (selection == 'a'):
-        amps_str = ser.read_until(b'\n')
-        amps_float = float(amps_str)
-        print('Current = ' + str(amps_float) + ' amps')
-    elif (selection == 'd'):
+    if (selection == 'd'):
+        # adds 1 to an integer
         input_str = input('Enter an integer: ') 
         input_int = int(input_str)
         print('The number = ' + str(input_int)) 
@@ -65,12 +64,8 @@ while not has_quit:
         n_str = ser.read_until(b'\n')
         n_int = int(n_str)
         print('Returned number = '+str(n_int)+'\n')
-    elif (selection == 'q'):
-        print('Exiting client')
-        has_quit = True; # exit client
-        # be sure to close the port
-        ser.close()
     elif (selection == 'e'):
+        # adds and subtracts two integers
         input_str = input('Enter two integers separated by a space: ')
         input_list = list(map(int,input_str.split()))
         print('The numbers are ' + str(input_list[0]) + ' and ' + str(input_list[1]))
@@ -81,28 +76,43 @@ while not has_quit:
         diff_str = ser.read_until(b'\n')
         diff_int = int(diff_str)
         print('Returned difference = ' + str(diff_int))
+    if (selection == 'a'):
+        # reads current
+        amps_str = ser.read_until(b'\n')
+        amps_float = float(amps_str)
+        print('Current = ' + str(amps_float) + ' amps')
     elif (selection == 'f'):
+        # sets duty cycle
         input_str = input('Enter duty cycle in range -100.0 to 100.0: ')
         input_float = float(input_str)
         print('The duty cycle = ' + str(input_float))
         ser.write((str(input_float)+'\n').encode())
     elif (selection == 'g'):
+        # sets Kp and Ki for current
         input_str = input('Enter Kp and Ki separated by a space: ')
         input_list = list(map(float,input_str.split()))
         print('Set Kp to ' + str(input_list[0]) + ' and Ki to ' + str(input_list[1]))
         ser.write((str(input_list[0])+' '+str(input_list[1])+'\n').encode())
     elif (selection == 'h'):
+        # reads out Kp and Ki for current
         output_str = ser.read_until(b'\n')
         output_list = list(map(float,output_str.split()))
         print('Kp = ' + str(output_list[0]) + ', Ki = ' + str(output_list[1]))
-    elif (selection == 'p'):
-        print('Set system to idle')
     elif (selection == 'r'):
-        
+        # reads out system status
         output_str = ser.read_until(b'\n')
         output_int = int(output_str)
         modes = ['IDLE', 'PWM', 'ITEST', 'HOLD', 'TRACK']
         print('Mode: ' + modes[output_int])
-        break
+    elif (selection == 'p'):
+        # powers off the system
+        print('Set system to idle')
+    elif (selection == 'q'):
+        # quits system
+        print('Exiting client')
+        has_quit = True; # exit client
+        # be sure to close the port
+        ser.close()
     else:
+        # invalid input
         print('Invalid Selection ' + selection_endline)

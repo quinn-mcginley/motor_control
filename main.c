@@ -5,12 +5,12 @@
 
 #define BUF_SIZE 200
 
-enum mode_t {IDLE, PWM, ITEST, HOLD, TRACK};
+enum mode_t {IDLE, PWM, ITEST, HOLD, TRACK};    // enumerates state variables
 enum mode_t mode = IDLE;    // initialize mode to idle
 
 float percent_power = 0.0f; // global variable to hold the current percent power for the motor
-float Kp_current = 0.0f;
-float Ki_current = 0.0f;
+float Kp_current = 0.0f;    // proportional PID gain for current control
+float Ki_current = 0.0f;    // integral PID gain for current control
 
 bool current_control() {
     switch(mode){
@@ -44,14 +44,9 @@ int main()
     while (true) {
         scanf("%s", buffer); // wait for the client to send a command
         switch(buffer[0]){
-            case 'a':
-            {
-                float current = read_ina219();
-                printf("%f\r\n", current);
-                break;
-            }
             case 'd':
             {
+                // adds 1 to an integer
                 volatile int n = 0;
                 scanf("%d", &n);
                 printf("%d\r\n", n+1);
@@ -59,10 +54,18 @@ int main()
             }
             case 'e':
             {
+                // adds and subtracts two integers
                 volatile int a = 0;
                 volatile int b = 0;
                 scanf("%d %d", &a, &b);
                 printf("%d\r\n%d\r\n", a+b, a-b);
+                break;
+            }
+            case 'a':
+            {
+                // reads current
+                float current = read_ina219();
+                printf("%f\r\n", current);
                 break;
             }
             case 'f':
@@ -75,28 +78,32 @@ int main()
             }
             case 'g':
             {
+                // sets Kp and Ki for current
                 scanf("%f %f", &Kp_current, &Ki_current);
                 break;
             }
             case 'h':
             {
+                // reads out Kp and Ki for current
                 printf("%f %f\r\n", Kp_current, Ki_current);
-                break;
-            }
-            case 'p':
-            {
-                // unpower the motor and set state to IDLE
-                mode = IDLE;
                 break;
             }
             case 'r':
             {
+                // reads out system status
                 printf("%d\r\n", mode);
+                break;
+            }
+            case 'p':
+            {
+                // powers off the system (ie. sets state to IDLE)
+                mode = IDLE;
                 break;
             }
             case 'q':
             {
-                // q for quit. Later you may want to return to IDLE mode here
+                // quits system
+                mode = IDLE;
                 break;
             }
             default:
