@@ -45,8 +45,8 @@ void set_motor(float percent_power) {
         level = percent_power/100.0f * TOP;
     } else {
         gpio_put(IN2_PIN, 1);
-        level = (100-percent_power)/100.0f * TOP;
+        level = (100+percent_power)/100.0f * TOP;
     }
-    
+
     pwm_set_gpio_level(IN1_PIN, level);
 }

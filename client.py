@@ -30,7 +30,7 @@ def read_plot_matrix():
 from genref import genRef
 
 import serial
-ser = serial.Serial('/dev/tty.usbmodem101')
+ser = serial.Serial('/dev/tty.usbmodem1101')
 print('Opening port: ')
 print(ser.name)
 
@@ -48,15 +48,12 @@ while not has_quit:
     # read the user's choice
     selection = input('\nENTER COMMAND: ')
     selection_endline = selection+'\n'
-     
-    # send the command to the PIC32
-    ser.write(selection_endline.encode()); # .encode() turns the string into a char array
-    
-    # take the appropriate actionsource .venv/bin/activate
 
     # there is no switch() in python, using if elif instead
     if (selection == 'd'):
         # adds 1 to an integer
+        # send the command to the PIC32
+        ser.write(selection_endline.encode()); # .encode() turns the string into a char array
         input_str = input('Enter an integer: ') 
         input_int = int(input_str)
         print('The number = ' + str(input_int)) 
@@ -66,6 +63,8 @@ while not has_quit:
         print('Returned number = '+str(n_int)+'\n')
     elif (selection == 'e'):
         # adds and subtracts two integers
+        # send the command to the PIC32
+        ser.write(selection_endline.encode()); # .encode() turns the string into a char array
         input_str = input('Enter two integers separated by a space: ')
         input_list = list(map(int,input_str.split()))
         print('The numbers are ' + str(input_list[0]) + ' and ' + str(input_list[1]))
@@ -76,39 +75,53 @@ while not has_quit:
         diff_str = ser.read_until(b'\n')
         diff_int = int(diff_str)
         print('Returned difference = ' + str(diff_int))
-    if (selection == 'a'):
+    elif (selection == 'a'):
         # reads current
+        # send the command to the PIC32
+        ser.write(selection_endline.encode()); # .encode() turns the string into a char array
         amps_str = ser.read_until(b'\n')
         amps_float = float(amps_str)
         print('Current = ' + str(amps_float) + ' amps')
     elif (selection == 'f'):
         # sets duty cycle
+        # send the command to the PIC32
+        ser.write(selection_endline.encode()); # .encode() turns the string into a char array
         input_str = input('Enter duty cycle in range -100.0 to 100.0: ')
         input_float = float(input_str)
         print('The duty cycle = ' + str(input_float))
         ser.write((str(input_float)+'\n').encode())
     elif (selection == 'g'):
         # sets Kp and Ki for current
+        # send the command to the PIC32
+        ser.write(selection_endline.encode()); # .encode() turns the string into a char array
         input_str = input('Enter Kp and Ki separated by a space: ')
         input_list = list(map(float,input_str.split()))
         print('Set Kp to ' + str(input_list[0]) + ' and Ki to ' + str(input_list[1]))
         ser.write((str(input_list[0])+' '+str(input_list[1])+'\n').encode())
     elif (selection == 'h'):
         # reads out Kp and Ki for current
+        # send the command to the PIC32
+        ser.write(selection_endline.encode()); # .encode() turns the string into a char array
         output_str = ser.read_until(b'\n')
         output_list = list(map(float,output_str.split()))
         print('Kp = ' + str(output_list[0]) + ', Ki = ' + str(output_list[1]))
     elif (selection == 'r'):
         # reads out system status
+        # send the command to the PIC32
+        ser.write(selection_endline.encode()); # .encode() turns the string into a char array
         output_str = ser.read_until(b'\n')
         output_int = int(output_str)
         modes = ['IDLE', 'PWM', 'ITEST', 'HOLD', 'TRACK']
         print('Mode: ' + modes[output_int])
     elif (selection == 'p'):
         # powers off the system
+        # send the command to the PIC32
+        ser.write(selection_endline.encode()); # .encode() turns the string into a char array
         print('Set system to idle')
     elif (selection == 'q'):
         # quits system
+        # send the command to the PIC32
+        ser.write(selection_endline.encode()); # .encode() turns the string into a char array
         print('Exiting client')
         has_quit = True; # exit client
         # be sure to close the port
