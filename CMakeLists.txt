@@ -34,8 +34,10 @@ project(motor_control C CXX ASM)
 pico_sdk_init()
 
 # Add executable. Default name is the project name, version 0.1
+add_executable(motor_control main.c ina219.c ina219.h h_bridge.c h_bridge.h encoder.c encoder.h)
 
-add_executable(motor_control main.c ina219.c ina219.h h_bridge.c h_bridge.h)
+# generate the pio header from the pio file
+pico_generate_pio_header(motor_control ${CMAKE_CURRENT_LIST_DIR}/quadrature_encoder.pio)
 
 pico_set_program_name(motor_control "motor_control")
 pico_set_program_version(motor_control "0.1")
@@ -51,6 +53,7 @@ target_link_libraries(motor_control
         hardware_gpio
         hardware_pwm
         hardware_clocks
+        hardware_pio
 )
 
 # Add the standard include files to the build

@@ -40,13 +40,23 @@ void init_h_bridge(){
 void set_motor(float percent_power) {
     uint16_t level;
 
-    if (percent_power >= 0) {   // this logic is defined by the chip
+    if (percent_power > 100.0f) {   // address control saturation
+        percent_power = 100.0f;
+    } else if (percent_power < -100.0f) {
+        percent_power = -100.0f;
+    }
+
+    // printf("Percent power is %f\r\n", percent_power);
+
+    if (percent_power >= 0) {       // this logic is defined by the chip, technically leads to fast decay forwards and slow decay in reverse, but is simple and works for our purposes
         gpio_put(IN2_PIN, 0);
         level = percent_power/100.0f * TOP;
     } else {
         gpio_put(IN2_PIN, 1);
         level = (100+percent_power)/100.0f * TOP;
     }
+
+    // printf("Level is %f\r\n", level);
 
     pwm_set_gpio_level(IN1_PIN, level);
 }

@@ -3,6 +3,7 @@
 #ifndef INA219_H
 #define INA219_H
 
+#include <stdio.h>
 #include "pico/stdlib.h"
 #include "hardware/i2c.h"
 

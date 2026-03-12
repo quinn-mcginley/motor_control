@@ -16,6 +16,7 @@ void writeINA219(int reg, int value);
 signed short readINA219(unsigned char reg);
 
 void init_ina219(){
+
     // init I2C on GP14 (SDA) and GP15 (SCL) on I2C1
     i2c_init(I2C_INST, 400 * 1000); // baud of 400kHz
     gpio_set_function(SDA_PIN, GPIO_FUNC_I2C);
@@ -31,10 +32,11 @@ void init_ina219(){
 }
 
 float read_ina219(){
-    float ma = 0;
+    float current = 0;
     signed short value = readINA219(INA219_REG_CURRENT);
-    ma = value / 3.0;   // conversion factor
-    return ma;
+    current = value / 3.0;   // conversion factor
+    
+    return current;
 }
 
 // write 2 bytes
@@ -48,6 +50,7 @@ void writeINA219(int reg, int value){
 
 // read 2 bytes
 signed short readINA219(unsigned char reg){
+    printf("hello");
     i2c_write_blocking(I2C_INST, INA219_ADDR, &reg, 1, true);   // write the register address to the INA219, with a repeated start so it's ready to read
     uint8_t buffer[2];      // create a buffer to hold the 2 bytes read from the INA219
     i2c_read_blocking(I2C_INST, INA219_ADDR, buffer, 2, false); // read 2 bytes into the buffer, with no repeated start
