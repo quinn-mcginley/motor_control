@@ -46,7 +46,7 @@ while not has_quit:
     print('k: ITEST \tt: read encoder counts \ty: read encoder angle \tz: zero encoder counts')
     print('i: set Kp_position, Ki_position, and Kd_position \t\tj: read Kp_position, Ki_position, and Kd_position')
     print('m: load step trajectory \tn: load cubic trajectory \to: track trajectory')
-    print('r: read mode \t\tp: power off \tq: quit \tq: quit')
+    print('r: read mode \t\tp: power off \tq: quit')
   
     # read the user's choice
     selection = input('\nENTER COMMAND: ')

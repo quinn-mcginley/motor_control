@@ -50,7 +50,6 @@ void writeINA219(int reg, int value){
 
 // read 2 bytes
 signed short readINA219(unsigned char reg){
-    printf("hello");
     i2c_write_blocking(I2C_INST, INA219_ADDR, &reg, 1, true);   // write the register address to the INA219, with a repeated start so it's ready to read
     uint8_t buffer[2];      // create a buffer to hold the 2 bytes read from the INA219
     i2c_read_blocking(I2C_INST, INA219_ADDR, buffer, 2, false); // read 2 bytes into the buffer, with no repeated start

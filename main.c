@@ -266,7 +266,6 @@ int main()
                 int num_positions;
                 scanf("%d", &num_positions);
 
-
                 for (int i=0; i<num_positions; i++) {
                     float p = 0.0f;
                     scanf("%f", &p);    // always drain input
@@ -279,7 +278,19 @@ int main()
             }
             case 'n':
             {
-                // load a trajectory (identical to 'm')
+                // load a trajectory
+                
+                int num_positions;
+                scanf("%d", &num_positions);
+
+                for (int i=0; i<num_positions; i++) {
+                    float p = 0.0f;
+                    scanf("%f", &p);    // always drain input
+                    if (i < 4000) {
+                        saved_desired_TRACK[i] = p;
+                    }
+                }
+
                 break;
             }
             case 'o':
