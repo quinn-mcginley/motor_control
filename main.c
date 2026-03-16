@@ -24,6 +24,7 @@ float Kd_position = 0.1f;       // derivative PID gain for position control
 float eint_position = 0;
 float saved_desired_TRACK[4000];
 float saved_actual_TRACK[4000];
+int num_positions;
 float desired_current;
 float last_error_position = 0.0f;
 
@@ -123,7 +124,7 @@ bool position_control(struct repeating_timer * pos_timer) {
 
             last_error_position = error_position;
             index_TRACK++;
-            if (index_TRACK >= 4000) {
+            if (index_TRACK >= num_positions) {
                 index_TRACK = 0;
                 mode = IDLE;
             }
@@ -263,15 +264,11 @@ int main()
             case 'm':
             {
                 // load a trajectory
-                int num_positions;
                 scanf("%d", &num_positions);
 
                 for (int i=0; i<num_positions; i++) {
                     float p = 0.0f;
-                    scanf("%f", &p);    // always drain input
-                    if (i < 4000) {
-                        saved_desired_TRACK[i] = p;
-                    }
+                    scanf("%f", &p);
                 }
 
                 break;
@@ -279,16 +276,11 @@ int main()
             case 'n':
             {
                 // load a trajectory
-                
-                int num_positions;
                 scanf("%d", &num_positions);
 
                 for (int i=0; i<num_positions; i++) {
                     float p = 0.0f;
-                    scanf("%f", &p);    // always drain input
-                    if (i < 4000) {
-                        saved_desired_TRACK[i] = p;
-                    }
+                    scanf("%f", &p);
                 }
 
                 break;
@@ -304,9 +296,9 @@ int main()
                     tight_loop_contents();
                 }
                 
-                printf("%d\r\n", 4000);
+                printf("%d\r\n", num_positions);
                 
-                for (int i=0; i<4000; i++) {
+                for (int i=0; i<num_positions; i++) {
                     printf("%.3f %.3f\r\n", saved_desired_TRACK[i], saved_actual_TRACK[i]);
                 }
 
